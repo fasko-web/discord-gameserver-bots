@@ -1,0 +1,16 @@
+{
+  "debug": false,
+  "token": "Discord bot token",
+  "prefix": ".",
+  "embedColor": "#00adff",
+  "statusType": "",
+  "apiType": 2,
+  "apiUrl": "https://example.com/api",
+  "serverId": 0,
+  "serverIp": "",
+  "serverPort": "27015",
+  "enablePterodactyl": 0,
+  "pterodactylHost": "https://example.com/",
+  "pterodactylServer": "",
+  "pterodactylKey": ""
+}
