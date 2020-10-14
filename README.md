@@ -9,7 +9,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/fasko-web/source-server-status)](https://GitHub.com/fasko-web/source-server-status/issues/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-![Discord-bot](https://i.gyazo.com/23a3f95b758a146efa7d4a3dfd5f3999.png)
+![Discord Bot](https://i.imgur.com/aD90nQs.png)
 
 ## Overview - [Changelog](/changelog.md)
 
