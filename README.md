@@ -1,9 +1,7 @@
 # Source Server Status
 
-[![GitHub license](https://img.shields.io/github/license/fasko-web/source-server-status)](https://github.com/Naereen/StrapDown.js/blob/main/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/fasko-web/source-server-status)](https://github.com/fasko-web/source-server-status/blob/main/LICENSE)
 [![Github all releases](https://img.shields.io/github/downloads/fasko-web/source-server-status/total)](https://github.com/fasko-web/source-server-status/releases/)
-[![Docker Build Status](https://img.shields.io/docker/build/kenrisa/discord-rustserverstatus)](https://hub.docker.com/r/kenrisa/discord-rustserverstatus/)
-[![Build Status](https://dev.azure.com/kenrisa/discord-rustserverstatus/_apis/build/status/Azure%20Pipelines?branchName=master)](https://dev.azure.com/kenrisa/discord-rustserverstatus/_build/latest?definitionId=5&branchName=master)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 
