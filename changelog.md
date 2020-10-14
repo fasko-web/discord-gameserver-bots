@@ -1,4 +1,4 @@
-# Release log
+# Release Log
 
 ## `v1.0.0` - Forked & Modified
 
