@@ -1,11 +1,13 @@
 # Source Server Status 
 
 [![GitHub release](https://img.shields.io/github/release/fasko-web/source-server-status)](https://GitHub.com/fasko-web/source-server-status/releases/)
+[![Generic badge](https://img.shields.io/badge/node-12.0-blue.svg)](https://nodejs.org/)
+[![Generic badge](https://img.shields.io/badge/discord-js-blue.svg)](https://discord.js.org/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+
 [![Github all releases](https://img.shields.io/github/downloads/fasko-web/source-server-status/total)](https://github.com/fasko-web/source-server-status/releases/)
 [![GitHub issues](https://img.shields.io/github/issues/fasko-web/source-server-status)](https://GitHub.com/fasko-web/source-server-status/issues/)
-
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 ![Discord-bot](https://i.gyazo.com/23a3f95b758a146efa7d4a3dfd5f3999.png)
 
