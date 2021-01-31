@@ -1,0 +1,6 @@
+# Config Files
+config/*
+!config/default.toml
+
+# Dependency directory
+node_modules/

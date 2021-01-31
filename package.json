@@ -1,25 +1,34 @@
 {
-  "name": "source-server-status",
-  "version": "v1.0.0",
-  "description": "A Discord bot that displays the playercount of your server from SourceQuery/REST API, with Pterodactyl integration.",
+  "name": "discord-gameserver-bots",
+  "version": "2.0.0",
+  "description": "A Discord bot instance for each gameserver. Queries from SourceQuery or REST API, w/ Pterodactyl integration.",
   "engines": {
     "node": ">=12.0"
   },
-  "main": "app.js",
+  "main": "./bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node ./bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fasko-web/discord-gameserver-bots.git"
   },
   "author": "Fasko",
-  "private": true,
-  "license": "ISC",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/fasko-web/discord-gameserver-bots/issues"
+  },
+  "homepage": "https://github.com/fasko-web/discord-gameserver-bots#readme",
   "dependencies": {
-    "discord.js": "^12.2.0",
-    "needle": "^2.5.2",
+    "da-slash": "https://github.com/fasko-web/da-slash",
+    "discord.js": "^12.5.1",
+    "needle": "^2.6.0",
     "sourcequery": "0.0.2",
-    "ws": "^7.2.5"
+    "ws": "^7.4.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.3"
+    "@ltd/j-toml": "^1.2.0",
+    "js-yaml": "^4.0.0"
   }
 }

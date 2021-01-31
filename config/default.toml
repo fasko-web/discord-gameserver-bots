@@ -1,0 +1,30 @@
+# Gameserver Settings
+[[server]]
+  name = "Game Server" # Discord bot will set this as their name
+  ip = '00.00.000.000'
+  port = 27015
+
+  # Discord Bot Settings
+  [server.bot]
+    token = '' # Discord bot token for this game server
+    color = '#00ADFF' # Used for embed and role colors
+
+    [server.bot.status]
+      type = 'PLAYING' # 'PLAYING' || 'WATCHING' || 'LISTENING'
+      players = true # If true, shows current & max players in bot status
+      map = true # If true, shows map in bot status
+
+  # Server API Settings
+  [server.api]
+    type = 'source' # 'web' || 'source'
+    url = '' # Only needed if using web api type, location of api feed
+    server_id = 0 # If your web api contains multiple servers, this is your server's index
+
+  # Pterodactyl Settings
+  #   Provides a more accurate status, only use if your gameserver is hosted on a Pterodactyl panel
+  #   Otherwise you can remove entirely
+  [server.pterodactyl]
+    enabled = false
+    url = '' # Root location of your Pterodactyl panel
+    server_id = ''
+    api_key = ''
