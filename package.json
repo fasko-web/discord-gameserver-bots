@@ -21,10 +21,15 @@
   },
   "homepage": "https://github.com/fasko-web/discord-gameserver-bots#readme",
   "dependencies": {
+    "bent": "^7.3.12",
+    "bottleneck": "^2.19.5",
     "da-slash": "https://github.com/fasko-web/da-slash",
     "discord.js": "^12.5.1",
-    "needle": "^2.6.0",
-    "sourcequery": "0.0.2",
+    "dotenv": "^8.2.0",
+    "gamedig": "^2.0.24",
+    "human-interval": "^2.0.1",
+    "jsonfile": "^6.1.0",
+    "p-ratelimit": "^1.0.1",
     "ws": "^7.4.2"
   },
   "devDependencies": {

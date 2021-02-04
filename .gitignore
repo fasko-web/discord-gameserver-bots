@@ -1,6 +1,10 @@
 # Config Files
+.env
 config/*
 !config/default.toml
 
 # Dependency directory
 node_modules/
+
+# Cache folder
+cache/*

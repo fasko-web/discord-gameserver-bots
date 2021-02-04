@@ -1,9 +1,15 @@
 # Gameserver Settings
+# Clone this .toml file, renaming it with your server's abbreviation
 [[server]]
+  enabled = false
   name = "Game Server" # Discord bot will set this as their name
+  game = 'garrysmod' # Defaults to garrysmod
+    # see the full list at: https://github.com/gamedig/node-gamedig#games-list
   ip = '00.00.000.000'
-  port = 27015
-
+  port = 27015 # Set to false or remove if not needed
+  rules = 'https://example.com/rules' # Link to your server's rules, set to false if not needed
+  content = 'https://example.com/content' # Link to a download of your server's content, set to false if not needed
+  discords = ['000000000000000000'] # If the server has seperate Discords, put the IDs here
   # Discord Bot Settings
   [server.bot]
     token = '' # Discord bot token for this game server
@@ -14,17 +20,18 @@
       players = true # If true, shows current & max players in bot status
       map = true # If true, shows map in bot status
 
-  # Server API Settings
+  # REST API Settings
   [server.api]
-    type = 'source' # 'web' || 'source'
-    url = '' # Only needed if using web api type, location of api feed
-    server_id = 0 # If your web api contains multiple servers, this is your server's index
+    enabled = false
+    url = 'https://example.com/api/server' # Location of JSON
+    server_id = 0 # If your web API contains multiple servers, this is your server's index
 
   # Pterodactyl Settings
   #   Provides a more accurate status, only use if your gameserver is hosted on a Pterodactyl panel
   #   Otherwise you can remove entirely
   [server.pterodactyl]
     enabled = false
-    url = '' # Root location of your Pterodactyl panel
-    server_id = ''
+    version = 'old' # If running Pterodactyl panel v1.0+ set to 'new', otherwise leave as 'old'
+    url = 'https://example.com' # Root location of your Pterodactyl panel, no trailing slash
+    server_id = '' # ID of your server within the Pterodactyl panel
     api_key = ''
