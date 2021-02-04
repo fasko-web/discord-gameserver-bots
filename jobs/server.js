@@ -18,7 +18,7 @@ module.exports = (ip, port = false, game = 'garrysmod') => {
   }).catch((error) => {
     return {
       state: 'off',
-      connect: ((port) ? `${ip}:${port}`: ip ),
+      connect: ((port) ? `${ip}:${port}`: ip),
       players: '0',
       maxPlayers: 'N/A',
       map: 'N/A'

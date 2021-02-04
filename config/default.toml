@@ -20,11 +20,13 @@
       players = true # If true, shows current & max players in bot status
       map = true # If true, shows map in bot status
 
-  # REST API Settings
+  # Web API Settings
+  #   If you have your server data already being cached somewhere, use this to prevent unneccessary queries to your game server
+  #   Otherwise you can remove entirely
   [server.api]
     enabled = false
     url = 'https://example.com/api/server' # Location of JSON
-    server_id = 0 # If your web API contains multiple servers, this is your server's index
+    server_id = 0 # If your web API contains multiple servers, this is your server's index or key (for key, use double quotes)
 
   # Pterodactyl Settings
   #   Provides a more accurate status, only use if your gameserver is hosted on a Pterodactyl panel
