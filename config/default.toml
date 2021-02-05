@@ -16,7 +16,7 @@
     color = '#00ADFF' # Used for embed and role colors
 
     [server.bot.status]
-      type = 'PLAYING' # 'PLAYING' || 'WATCHING' || 'LISTENING'
+      type = 'PLAYING' # 'PLAYING' || 'WATCHING' || 'LISTENING' || 'STREAMING' || 'COMPETING'
       players = true # If true, shows current & max players in bot status
       map = true # If true, shows map in bot status
 
@@ -37,3 +37,10 @@
     url = 'https://example.com' # Root location of your Pterodactyl panel, no trailing slash
     server_id = '' # ID of your server within the Pterodactyl panel
     api_key = ''
+
+  # Optional Settings
+  [server.optional]
+    connect_url = '' # Must be HTTP or HTTPS! steam:// unsupported by Discord
+    rules_url = ''
+    content_url = ''
+    discord_ids = ['','']

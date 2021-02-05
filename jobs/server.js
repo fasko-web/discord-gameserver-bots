@@ -1,4 +1,3 @@
-require('dotenv').config();
 const GameDig = require('gamedig');
 
 module.exports = (ip, port = false, game = 'garrysmod') => {

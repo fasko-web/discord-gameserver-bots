@@ -74,4 +74,6 @@ if (process.env.COMMAND_BOT_TOKEN && servers.length !== 0) {
     slash.matchCommand(interaction);
   });
   client.login(process.env.COMMAND_BOT_TOKEN);
+} else {
+  console.log('[WARN]', 'No bot token provided in the .env, commands disabled! (COMMAND_BOT_TOKEN)')
 }

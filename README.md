@@ -1,21 +1,43 @@
-# Source Server Status 
+<p align="center">
+  <img src="https://i.imgur.com/0QarNx8.png" alt="Definitive icon" width="250" align="center" />
+</p>
 
-[![GitHub release](https://img.shields.io/github/release/fasko-web/source-server-status)](https://GitHub.com/fasko-web/source-server-status/releases/)
-[![Generic badge](https://img.shields.io/badge/node-12.0-blue.svg)](https://nodejs.org/)
-[![Generic badge](https://img.shields.io/badge/discord-js-blue.svg)](https://discord.js.org/)
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+<p align="center">
+  <a href="https://github.com/fasko-web/discord-gameserver-bots" target="_blank">
+    <strong>Discord Gameserver Bots</strong>
+  </a>
+</p>
 
-[![Github all releases](https://img.shields.io/github/downloads/fasko-web/source-server-status/total)](https://github.com/fasko-web/source-server-status/releases/)
-[![GitHub issues](https://img.shields.io/github/issues/fasko-web/source-server-status)](https://GitHub.com/fasko-web/source-server-status/issues/)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+<p align="center"><em>Discord.js · Gamedig · Pterodactyl</em></p>
 
+<p align="center">
+	<a href="https://github.com/fasko-web/discord-gameserver-bots/releases">
+		<img src="https://img.shields.io/github/release/fasko-web/discord-gameserver-bots.svg">
+	</a>
+	<a href="https://github.com/fasko-web/discord-gameserver-bots/blob/main/LICENSE">
+		<img src="https://img.shields.io/github/license/fasko-web/discord-gameserver-bots.svg">
+	</a>
+  <a href="https://github.com/fasko-web/discord-gameserver-bots/releases/">
+    <img src="https://img.shields.io/github/downloads/fasko-web/discord-gameserver-bots/total">
+  </a>
+	<a href="https://discordapp.com/invite/sB9WZ2f" target="_blank">
+		<img src="https://img.shields.io/discord/350480317297197057.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2">
+	</a>
+</p>
+
+---
+
+An application for creating and managing Discord bots that display information related to your game servers, with a separate commands bot using Discord's new slash commands API.
+The purpose of the separate commands bot is to unify all server commands under one bot, which will avoid spamming the commands list with a section for each server. However it also allows commands to be entirely optional!
+
+Each game server can be configured via it's own TOML file within the config directory, with all other options being configured via the `.env` file in the root directory.
+
+---
+
+#### Getting Started
 ![Discord Bot](https://i.imgur.com/aF89SrI.png)
 
-## Overview - [Changelog](/changelog.md)
-
 A Discord bot that updates its activity status to display how many players are currently connected to your game server using SourceQuery or REST API, with Pterodactyl support.
-
-Runs on Windows, macOS, and Linux, see Installation section for more info.
 
 Requires npm and nodejs.
 
@@ -67,7 +89,6 @@ Location: config/serverX.json (default on first startup: config/server1.json)
 **Requirements:**
 - [node.js](https://nodejs.org/) >= 12.0
 - npm (gets installed w/ node.js)
-- Windows/macOS/Linux/~~Docker~~
 
 #### Basic Installation
 1. Download the repo as a zip or use git clone https://github.com/fasko-web/source-server-status.git
@@ -83,18 +104,6 @@ Location: config/serverX.json (default on first startup: config/server1.json)
 6. Open "config/server1.json", add your Discord bot\'s token, and configure the rest.
 7. Start the bot again with `npm start`, it should now be showing up on Discord.
 	- Feel free to check w/ `.<prefix> status`
-
-#### Windows: Install the bot as a windows service.
-  - Open powershell: npm install
-  - npm install -g node-windows
-  - npm link node-windows
-  - node installSVC.js
-  - You will get some prompt to allow it to install, press yes on all.
-  - Open services.msc and see discord-rustserverstatus is started. now it will always start on bootup.
-
-* Uninstall:
-  - node uninstallSVC.js
-  - Press yes on all prompts
 
 #### Linux: Run the bot with pm2.
 1. Run `npm install pm2 -g`

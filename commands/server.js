@@ -20,7 +20,7 @@ module.exports = new Slash.GuildCommand({
       description: `Displays information about one of ${process.env.COMMUNITY_NAME || 'our'} game servers.`,
       type: 1,
       options: [{
-        name: 'options',
+        name: 'server',
         description: 'Choose a game server to get the information for.',
         type: 3,
         required: true,
@@ -31,7 +31,7 @@ module.exports = new Slash.GuildCommand({
       description: `Connect to one of ${process.env.COMMUNITY_NAME || 'our' } game servers.`,
       type: 1,
       options: [{
-        name: 'options',
+        name: 'server',
         description: 'Choose a game server to connect to.',
         type: 3,
         required: true,
@@ -42,7 +42,7 @@ module.exports = new Slash.GuildCommand({
       description: `Displays any discords related to one of ${process.env.COMMUNITY_NAME || 'our'} game servers.`,
       type: 1,
       options: [{
-        name: 'options',
+        name: 'server',
         description: 'Choose a game server to get the discords for.',
         type: 3,
         required: true,
@@ -55,9 +55,9 @@ module.exports = new Slash.GuildCommand({
     const request = interaction.request;
     const subCommand = request.data.options[0];
     const arguments = subCommand.options.map(arg => { return { name: arg.name, value: arg.value }});
-    if (arguments.find(arg => arg.name === 'options') && !arguments.find(arg => arg.name === 'options').value) return;
+    if (arguments.find(arg => arg.name === 'server') && !arguments.find(arg => arg.name === 'server').value) return;
     console.log(subCommand.name, request.data);
-    const serverAbbr = arguments.find(arg => arg.name === 'options').value;
+    const serverAbbr = arguments.find(arg => arg.name === 'server').value;
     const client = interaction.client;
     const guild = await interaction.guild();
     const author = `${request.member.user.username}#${request.member.user.discriminator}`;

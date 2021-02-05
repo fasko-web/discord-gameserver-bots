@@ -8,18 +8,18 @@ const queryPtero = require('./pterodactyl.js');
 const bottleneckSettings = { maxConcurrent: 1, highWater: 1, reservoir: 1, reservoirRefreshAmount: 1 }
 
 const webLimiter = new Bottleneck({
-  bottleneckSettings,
-  reservoirRefreshInterval: humanInterval(process.env.WEB_QUERY_INTERVAL)
+  ...bottleneckSettings,
+  reservoirRefreshInterval: humanInterval(process.env.WEB_QUERY_INTERVAL || '30 seconds')
 });
 
 const serverLimiter = new Bottleneck({
-  bottleneckSettings,
-  reservoirRefreshInterval: humanInterval(process.env.SERVER_QUERY_INTERVAL)
+  ...bottleneckSettings,
+  reservoirRefreshInterval: humanInterval(process.env.SERVER_QUERY_INTERVAL || '1 minute')
 });
 
 const pteroLimiter = new Bottleneck({
-  bottleneckSettings,
-  reservoirRefreshInterval: humanInterval(process.env.PTERODACTYL_QUERY_INTERVAL)
+  ...bottleneckSettings,
+  reservoirRefreshInterval: humanInterval(process.env.PTERODACTYL_QUERY_INTERVAL || '15 seconds')
 });
 
 const limiters = [
@@ -29,7 +29,10 @@ const limiters = [
 ];
 
 module.exports = async function query(client_id, server) {
-  const cache = jf.readFileSync(`./cache/${server.abbr}.json`, { throws: false });
+  let cache = jf.readFileSync(`./cache/${server.abbr}.json`, { throws: false })
+  if (cache) {
+    cache = { state: cache.current_state, connect: cache.connect, players: cache.players, maxPlayers: cache.max_players, map: cache.map };
+  }
   limiters.map(limiter => {
     limiter.type.on('failed', async(err, job) => {
       console.warn('[ERROR]', `${limiter.name} query failed. (${server.name})\n${err}`);
@@ -39,12 +42,12 @@ module.exports = async function query(client_id, server) {
     });
     limiter.type.on('retry', (err, job) => console.log('[INFO]', `Retrying ${limiter.name.toLowerCase()} query. (${server.name})`));
   });
-  let response = {
-    state: cache.current_state,
-    connect: cache.connect,
-    players: cache.players,
-    maxPlayers: cache.max_players,
-    map: cache.map
+  let response = cache || {
+    state: 'off',
+    connect: ((server.port) ? `${server.ip}:${server.port}`: server.ip),
+    players: '0',
+    maxPlayers: 'N/A',
+    map: 'N/A'
   };
   if (server.api && server.api.enabled) {
     if (!server.api.url) {
@@ -140,7 +143,7 @@ module.exports = async function query(client_id, server) {
 
   return new Promise((resolve, reject) => {
     jf.readFile(`./cache/${server.abbr}.json`, function(err, obj) {
-      if (json.players === obj.players) return;
+      if (obj && obj.players === json.players) return;
       jf.writeFile(`./cache/${server.abbr}.json`, json, function(err) {
         if (err) return console.log(err);
         console.log('[EVENT]', `Cache updated. (${server.name})`);
