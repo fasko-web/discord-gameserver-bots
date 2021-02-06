@@ -39,7 +39,7 @@ An application for creating and managing Discord bots that display information r
   - Provides "starting" and "stopping" statuses
   - Supports v0.7 and v1+ APIs
 - Optional commands bot featuring Discord's new [slash commands](https://discord.com/developers/docs/interactions/slash-commands)
-- Custom query intervals <span style="font-size:small">(be safe kids)</span>
+- Custom query intervals <sup>(be safe kids)</sup>
 - Individual server configuring via [TOML](https://toml.io/)
   - Toggle whether to show the map or players in your status
   - Provide IDs of Discords associated with a game server
@@ -73,11 +73,12 @@ SERVER_QUERY_INTERVAL = 1 minute
 API_QUERY_INTERVAL = 30 secs
 PTERODACTYL_QUERY_INTERVAL = 15 seconds
 ```
+
 <details>
-<summary>
-Environment Config Details
-</summary>
-<p></p>
+  <summary>
+    Environment Config Details
+  </summary>
+  <p></p>
 
 Config Name | Information
 ------------|------------
@@ -106,7 +107,7 @@ npm ci
 ```node
 npm start
 ```
-As long as your console isn't printing any errors, your bots will now be online and displaying their server's status!
+Your bots will now be online and displaying their server's status!
 
 ##### 🛑 Reporting errors
 If you receive any errors that you are unable to debug, please submit a new issue in this repository with your console's error log. Make sure it contains no sensitive information!
@@ -115,10 +116,12 @@ If you receive any errors that you are unable to debug, please submit a new issu
 
 <details>
   <summary>
-    <h4 style="display: inline-block;">Using PM2 (Runs forever)</h4>
+    <b>Using PM2 (Runs forever)</b>
   </summary>
+  <p></p>
 
 [PM2](https://pm2.keymetrics.io/) is a process manager loaded with tons of features, that helps to keep your application online.
+
 ##### 1. Install the latest version of PM2 globally
 ```node
 npm i pm2@latest -g
@@ -133,6 +136,7 @@ Your bots will now come back online automatically if your server happens to go d
 - You can find a list of helpful PM2 commands [here](https://pm2.keymetrics.io/docs/usage/quick-start/#cheatsheet).
 
 If you plan on having a single server with multiple applications, or already do, then I highly recommend trying out [CapRover](https://caprover.com/); an application/database deployment/web service manager including web GUI, with support for Nginx, SSL, Netdata, and Docker.
+
 </details>
 
 ---
