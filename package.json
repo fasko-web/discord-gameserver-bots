@@ -15,7 +15,7 @@
     "url": "git+https://github.com/fasko-web/discord-gameserver-bots.git"
   },
   "author": "Fasko",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/fasko-web/discord-gameserver-bots/issues"
   },
