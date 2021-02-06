@@ -30,10 +30,6 @@
     "human-interval": "^2.0.1",
     "jsonfile": "^6.1.0",
     "p-ratelimit": "^1.0.1",
-    "ws": "^7.4.2"
-  },
-  "devDependencies": {
-    "@ltd/j-toml": "^1.2.0",
-    "js-yaml": "^4.0.0"
+    "@ltd/j-toml": "^1.2.0"
   }
 }

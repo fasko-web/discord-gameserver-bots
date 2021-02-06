@@ -1,7 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const { parseConfig } = require('./utils/confort.js');
+const TOML = require('@ltd/j-toml');
 const { Client } = require('discord.js');
 const query = require('./jobs');
 
@@ -10,7 +10,8 @@ const files = fs.readdirSync('./config', { withFileTypes: true })
 
 let servers = [];
 files.map(file => {
-  const config = parseConfig(`./config/${file.name}`);
+  const contents = fs.readFileSync(`./config/${file.name}`, 'utf-8');
+  const config = TOML.parse(contents, 1.0, '\n');
   if (!config.server[0].enabled) return;
 
   const server = config.server[0];
