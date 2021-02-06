@@ -27,86 +27,97 @@
 
 ---
 
-An application for creating and managing Discord bots that display information related to your game servers, with a separate commands bot using Discord's new slash commands API.
-The purpose of the separate commands bot is to unify all server commands under one bot, which will avoid spamming the commands list with a section for each server. However it also allows commands to be entirely optional!
+An application for creating and managing Discord bots that display information related to your game servers; with a separate optional commands bot using Discord's new slash commands API.
 
-Each game server can be configured via it's own TOML file within the config directory, with all other options being configured via the `.env` file in the root directory.
+![Discord Bot](https://i.imgur.com/aF89SrI.png)
+
+---
+
+#### Features
+- Supports any GameDig compatible server, or json API
+- Optional Pterodactyl Panel API Integration
+  - Provides "starting" and "stopping" statuses
+  - Supports v0.7 and v1+
+- Configurable query intervals
+- Server configuring via [TOML](https://toml.io/)
 
 ---
 
 #### Getting Started
-![Discord Bot](https://i.imgur.com/aF89SrI.png)
+Ensure you have [Node.js](https://nodejs.org/) v12 or higher installed, then download this repository.
+- You can check your Node's version by running `node -v`
 
-A Discord bot that updates its activity status to display how many players are currently connected to your game server using SourceQuery or REST API, with Pterodactyl support.
-
-Requires npm and nodejs.
-
-- SourceQuery (gets information directly from a Source server)
-- REST API Support (similar layout to SourceQuery, except fetches data from URL)
-- Pterodactyl Integration (will show when server is starting/stopping)
-
-## Configuration
-example_config.json
-
-Location: config/serverX.json (default on first startup: config/server1.json)
+##### 📝 [Create your Discord applications](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)
+When inviting your bots to your server, status bots don't require any permissions, however if you wish to use the commands bot, you should use the following link:
 ```
-{
-  "debug": false,
-  "token": "Discord bot token",
-  "prefix": ".",
-  "embedColor": "#00adff",
-  "statusType": "",
-  "apiType": 2,
-  "apiUrl": "https://example.com/api",
-  "serverId": 0,
-  "serverIp": "",
-  "serverPort": "27015",
-  "enablePterodactyl": 0,
-  "pterodactylHost": "https://example.com/",
-  "pterodactylServer": "",
-  "pterodactylKey": ""
-}
+https://discord.com/api/oauth2/authorize?client_id=<YOUR_DISCORD_CLIENT_ID>&permissions=280576&scope=applications.commands+bot
 ```
-- token: Your Discord bot's token.
-- prefix: The prefix to use for your server's status command
-- embedColor: The color your Dicord bot uses for the server's status command
-- statusType: Activity type for Discord bot: PLAYING, WATCHING, etc
-- apiType:
-  - 1 = REST API (URL)
-  - 2 = SourceQuery (IP and Port)
-- apiUrl: The URL to your server's REST API
-- serverId: If your REST API json has multiple server's in it, use this for indexing, otherwise 0 should suffice
-- serverIp: The IP to your game server
-- serverPort: The port to your game server
-- enablePterodactyl:
-  - 0 = Disabled
-  - 1 = Enabled
-- pterodactylHost: The URL to your Pterodactyl panel (with trailing slash)
-- pterodactylServer: The server's ID in your Pterodactyl panel
-- pterodactylKey: The API key to your Pterodactyl panel
+- Invite links for each bot are logged in console upon startup as well
 
-## Installation
-**Requirements:**
-- [node.js](https://nodejs.org/) >= 12.0
-- npm (gets installed w/ node.js)
+##### ⚙️ Configure your `.env`
+Either rename `.env.example` to `.env`, or create a new file in the root directory named `.env` with the contents below:
+```env
+COMMUNITY_NAME =
 
-#### Basic Installation
-1. Download the repo as a zip or use git clone https://github.com/fasko-web/source-server-status.git
-2. Extract it and open the folder, then open your CLI in the same folder.
-3. Run `npm install` (This downloads the required modules from package.json)
-	- You should see a new folder called "node_modules"
-4. Start the bot with `npm start`, and then stop it.
-	- You should see a new folder called "config"
-5. Create your Discord bot and invite it to your server.
-	- https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token
-	- https://discordapp.com/developers/applications/me/
-	- `https://discordapp.com/oauth2/authorize?&client_id=<YOUR_CLIENT_ID_HERE>&scope=bot&permissions=0`
-6. Open "config/server1.json", add your Discord bot\'s token, and configure the rest.
-7. Start the bot again with `npm start`, it should now be showing up on Discord.
-	- Feel free to check w/ `.<prefix> status`
+COMMAND_BOT_PREFIX = server
+COMMAND_BOT_TOKEN =
+DISCORD_GUILD_IDS =
+SHOW_USER_INPUT = false
 
-#### Linux: Run the bot with pm2.
-1. Run `npm install pm2 -g`
-2. Run `pm2 start app.js --name <YOUR_SERVER_NAME>`
-- Use `pm2 status` to see all pm2 processes
-- Use `pm2 monit` to view the log of active pm2 processes
+SERVER_QUERY_INTERVAL = 1 minute
+API_QUERY_INTERVAL = 30 secs
+PTERODACTYL_QUERY_INTERVAL = 15 seconds
+```
+Environment Configureables:
+- `COMMUNITY_NAME`: defaults to 'our'
+- `COMMAND_BOT_PREFIX`: defaults to 'server'
+- `COMMMAND_BOT_TOKEN`: leave this blank to disable the commands bot
+- `DISCORD_GUILD_IDS`: leave this blank to use global commands (global slash commands can take awhile to update)
+- `SHOW_USER_INPUT`: sends the command a user sent to the bot, off by default
+- `SERVER_QUERY_INTERVAL`: defaults to one minute
+- `API_QUERY_INTERVAL`: defaults to 30 secs
+- `PTERODACTYL_QUERY_INTERVAL`: defaults to 15 secs
+
+
+##### 🛠️ Configure your game servers
+1. Create a new `.toml` file within the config directory with your server's abbreviation as the name.
+  - Example: `/config/drp.toml`
+2. Copy the contents of `/config/default.toml` to your new server's configuration file, and configure it to your liking.
+
+##### 📥 Install dependencies
+```node
+npm ci
+```
+
+##### 🎉 Start the bots
+```node
+npm start
+```
+As long as your console isn't printing any errors, your bots will now be online and displaying their server's status!
+
+###### Reporting Errors
+If you receive any errors that you are unable to debug, please submit a new issue in this repository with your console's error log. Make sure it contains no sensitive information!
+
+---
+
+#### Using PM2
+[PM2](https://pm2.keymetrics.io/) is a process manager loaded with tons of features, that helps to keep your application online.
+##### 1. Install the latest version of PM2 globally
+```node
+npm i pm2@latest -g
+```
+
+##### 2. Add the bot to your PM2 list and start it
+```node
+pm2 start bot.js --name discord-gameserver-bots
+```
+Your bots will now come back online automatically if your server happens to go down!
+
+You can find a list of helpful PM2 commands [here](https://pm2.keymetrics.io/docs/usage/quick-start/#cheatsheet).
+
+If you plan on having a single server with multiple applications, or already do, then I highly recommend trying out [CapRover](https://caprover.com/); an application/database deployment/web service manager including web GUI, with support for Nginx, SSL, Netdata, and Docker.
+
+---
+
+#### Authors
+[![Contributors Display](https://badges.pufler.dev/contributors/fasko-web/discord-gameserver-bots?size=50&padding=5&bots=true)](https://badges.pufler.dev)
