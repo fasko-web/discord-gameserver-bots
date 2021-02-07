@@ -25,14 +25,22 @@ files.map(file => {
   }
 
   server.abbr = path.parse(file.name).name;
+
+  if (server.optional) {
+    optionalSettings = {
+      connectURL: (server.optional.connect_url) ? server.optional.connect_url : false,
+      rules: (server.optional.rules_url) ? server.optional.rules : false,
+      content: (server.optional.content_url) ? server.content : false,
+      discords: (server.optional.discord_ids) ? server.discords : false
+    }
+  }
+
   servers.push({
-    name: server.name,
+    name: server.name || 'Game Server',
     abbr: server.abbr,
     color: (server.bot.color) ? server.bot.color : '#00ADFF',
-    rules: (server.rules) ? server.rules : false,
-    content: (server.content) ? server.content : false,
-    discords: (server.discords) ? server.discords : false
-  });
+    ...optionalSettings
+  })
 
   const client = new Client();
 

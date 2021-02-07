@@ -7,25 +7,25 @@ const queryPtero = require('./pterodactyl.js');
 
 const bottleneckSettings = { maxConcurrent: 1, highWater: 1, reservoir: 1, reservoirRefreshAmount: 1 }
 
-const webLimiter = new Bottleneck({
+const webLimiters = new Bottleneck.Group({
   ...bottleneckSettings,
   reservoirRefreshInterval: humanInterval(process.env.WEB_QUERY_INTERVAL || '30 seconds')
 });
 
-const serverLimiter = new Bottleneck({
+const serverLimiters = new Bottleneck.Group({
   ...bottleneckSettings,
   reservoirRefreshInterval: humanInterval(process.env.SERVER_QUERY_INTERVAL || '1 minute')
 });
 
-const pteroLimiter = new Bottleneck({
+const pteroLimiters = new Bottleneck.Group({
   ...bottleneckSettings,
   reservoirRefreshInterval: humanInterval(process.env.PTERODACTYL_QUERY_INTERVAL || '15 seconds')
 });
 
-const limiters = [
-  { name: 'Web API', type: webLimiter },
-  { name: 'Server', type: serverLimiter },
-  { name: 'Pterodactyl', type: pteroLimiter }
+const limiterGroups = [
+  { name: 'Web API', type: webLimiters },
+  { name: 'Server', type: serverLimiters },
+  { name: 'Pterodactyl', type: pteroLimiters }
 ];
 
 module.exports = async function query(client_id, server) {
@@ -33,14 +33,17 @@ module.exports = async function query(client_id, server) {
   if (cache) {
     cache = { state: cache.current_state, connect: cache.connect, players: cache.players, maxPlayers: cache.max_players, map: cache.map };
   }
-  limiters.map(limiter => {
-    limiter.type.on('failed', async(err, job) => {
-      console.warn('[ERROR]', `${limiter.name} query failed. (${server.name})\n${err}`);
+  webLimiters.on('created', (limiter, key) => {
+    limiter.on('error', (err) => {
+      console.log('[ERROR]', err);
+    });
+    limiter.on('failed', (err, job) => {
+      console.warn('[ERROR]', `Web query failed. (${server.name})\n${err}`);
       if (job.retryCount !== 0) return;
-      console.log('[WARN]', `Retrying ${limiter.name.toLowerCase()} query in one second. (${server.name})`);
+      console.log('[WARN]', `Retrying web query in one second. (${server.name})`);
       return humanInterval('1 sec');
     });
-    limiter.type.on('retry', (err, job) => console.log('[INFO]', `Retrying ${limiter.name.toLowerCase()} query. (${server.name})`));
+    limiter.on('retry', (err, job) => console.log('[INFO]', `Retrying web query. (${server.name})`));
   });
   let response = cache || {
     state: 'off',
@@ -55,13 +58,17 @@ module.exports = async function query(client_id, server) {
       process.exit();
     } else {
       try {
-        response = await webLimiter.schedule(() => queryWeb(server.ip, server.port, server.api));
+        response = await webLimiters.key(`${server.abbr}-web-query`).schedule(
+          () => queryWeb(server.ip, server.port, server.api)
+        );
         console.log('[EVENT]', `Web API queried. (${server.name})`);
       } catch(err) {}
     }
   } else {
     try {
-      response = await serverLimiter.schedule(() => queryServer(server.ip, server.port, server.game));
+      response = await serverLimiters.key(`${server.abbr}-server-query`).schedule(
+        () => queryServer(server.ip, server.port, server.game)
+      );
       console.log('[EVENT]', `Server queried. (${server.name})`);
     } catch(err) {}
   }
@@ -70,7 +77,9 @@ module.exports = async function query(client_id, server) {
   let state = response.state;
   if (server.pterodactyl && server.pterodactyl.enabled) {
     try {
-      const pteroState = await pteroLimiter.schedule(() => queryPtero(server.pterodactyl));
+      const pteroState = await pteroLimiters.key(`${server.abbr}-ptero-query`).schedule(
+        () => queryPtero(server.pterodactyl)
+      );
       console.log('[EVENT]', `Pterodactyl queried. (${server.name})`);
       console.log(pteroState);
       state = ((state !== pteroState) ? pteroState : state);

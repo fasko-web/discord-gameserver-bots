@@ -50,7 +50,7 @@ module.exports = (command, embed, d) => {
     case 'connect':
       switch(true) {
         case (d.cache.current_state === 'on' || d.cache.current_state === 'starting'):
-          embed.setAuthor(`Connect to ${d.serverBot.username}`, d.serverBot.displayAvatarURL(16), `https://definitivenetworksgmod.com/connect/steam/cvr`)
+          embed.setAuthor(`Connect to ${d.serverBot.username}`, d.serverBot.displayAvatarURL(16), d.server.connectURL)
             .setFooter("You'll be redirected to your browser, then Steam.")
           break;
         case (d.cache.current_state === 'off' || d.cache.current_state === 'stopping'):
