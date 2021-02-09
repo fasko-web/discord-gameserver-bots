@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.imgur.com/0QarNx8.png" alt="Definitive icon" width="250" align="center" />
+  <img src="https://i.imgur.com/W9NueQG.png" alt="Discord Gameserver Bots" width="250" align="center" />
 </p>
 
 <p align="center">
@@ -29,7 +29,7 @@
 
 An application for creating and managing Discord bots that display information related to your game servers; with a separate optional commands bot using Discord's new slash commands API.
 
-![Discord Bot](https://i.imgur.com/aF89SrI.png)
+<p align="center"><img src="https://i.imgur.com/BWDVVss.png" alt="Previews"/></p>
 
 ---
 
@@ -54,7 +54,7 @@ An application for creating and managing Discord bots that display information r
   - Provides "starting" and "stopping" statuses
   - Supports v0.7 and v1+ APIs
 - Optional commands bot featuring Discord's new [slash commands](https://discord.com/developers/docs/interactions/slash-commands)
-- Custom query intervals <sup>(be safe kids)</sup>
+- Custom query intervals <sup>(5 seconds minimum)</sup>
 - Individual server configuring via [TOML](https://toml.io/)
   - Toggle whether to show the map or players in your status
   - Provide Discords associated with a game server

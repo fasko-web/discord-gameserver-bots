@@ -113,8 +113,8 @@ const options = {
       let discords = server.discords.filter(discord => discord.invite_code).map(discord => {
         return `\n**${discord.name}**\nhttps://discord.gg/${discord.invite_code}\n`
       }).join('');
-      interaction.sendMessage(`<@${request.member.user.id}>\n${server.name} related Discords can be found below:\n${discords}`
-      );
+      let mention = (process.env.SHOW_USER_INPUT === 'false') ? `<@${request.member.user.id}>\n` : '';
+      interaction.sendMessage(`${mention}${server.name} related Discords can be found below:\n${discords}`);
     } else {
       let embed = new MessageEmbed().setColor(server.color);
       embed = commandEmbed(subCommand.name, embed, data);

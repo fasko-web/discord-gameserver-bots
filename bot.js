@@ -58,13 +58,14 @@ files.map(file => {
     loop();
     if (client.user.username !== server.name) {
       console.log('[EVENT]', `Setting username/nicknames of ${client.user.username} to: ${server.name}`);
-      client.user.setUsername(server.name).then(client.guilds.cache.map(guild => {
-        guild.member(client.user).setNickname(server.name, 'Updated server username.');
-      })).catch(error => {
-        console.log('[ERROR]', `${error}\n(You can only set your bot's username four times an hour!)`)
+      client.user.setUsername(server.name).then(() => {
+        console.log('[EVENT]', `${client.user.username} is ready!`);
+        client.guilds.cache.map(guild => { guild.member(client.user).setNickname(server.name, 'Updated server username.') });
+      }).catch(error => {
+        console.log('[ERROR]', `(${client.user.username}) ${error}`);
+        console.log('[EVENT]', `${client.user.username} is ready!`);
       });
     }
-    console.log('[EVENT]', `${client.user.username} is ready!`);
     console.log('[INFO]', `Bot Invite URL: https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=0&scope=bot`)
   });
   client.login(bot.token);
