@@ -66,8 +66,6 @@ An application for creating and managing Discord bots that display information r
 Ensure you have [Node.js](https://nodejs.org/) v12 or higher installed, then download this repository.
 - You can check your Node's version by running `node -v`
 
-
-
 #### 1. [Create your Discord applications](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) 📝
 Invite links for each bot are logged in the console upon startup.
 
@@ -75,8 +73,6 @@ If you wish to invite the bots now though, the only requirement for status bots 
 ```
 https://discord.com/api/oauth2/authorize?client_id=<YOUR_DISCORD_CLIENT_ID>&permissions=280576&scope=applications.commands+bot
 ```
-
-
 
 #### 2. Configure your `.env` ⚙️
 Either rename `.env.example` to `.env`, or create a new file in the root directory named `.env` with the contents below:
@@ -117,17 +113,13 @@ Config Name | Information
     - Example: `/config/drp.toml`
 2. Copy the contents of `/config/default.toml` to your new server's configuration file, and configure it to your liking.
 
-
-
 #### 4. Install dependencies 📥
-```node
+```bash
 npm ci
 ```
 
-
-
 #### 5. Start the bots 🎉
-```node
+```bash
 npm start
 ```
 Your bots will now be online and displaying their server's status!
@@ -141,12 +133,12 @@ Your bots will now be online and displaying their server's status!
 [PM2](https://pm2.keymetrics.io/) is a process manager loaded with tons of features, that helps to keep your application online.
 
 ##### 1. Install the latest version of PM2 globally
-```node
+```bash
 npm i pm2@latest -g
 ```
 
 ##### 2. Add the bot to your PM2 list and start it
-```node
+```bash
 pm2 start bot.js --name discord-gameserver-bots
 ```
 Your bots will now come back online automatically if your server happens to go down!
@@ -161,7 +153,7 @@ If you plan on having a single server with multiple applications, or already do,
 
 #### 🗑️ Removing commands
 If you're removing the bot from your server, then you'll probably want to delete the commands left behind as well.
-```node
+```bash
 npm run delete
 ```
 
