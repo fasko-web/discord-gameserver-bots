@@ -2,7 +2,6 @@ const { pRateLimit } = require('p-ratelimit');
 const bent = require('bent');
 
 const rateLimit = pRateLimit({ interval: 60000, rate: 240 });
-// limits your web API with 240 requests a minute or 4 requests a second.
 
 module.exports = async (ip, port = false, api) => {
   if (!api || !api.enabled) return;

@@ -1,90 +1,70 @@
 const humanInterval = require('human-interval');
-const Bottleneck = require('bottleneck');
 const jf = require('jsonfile');
 const queryWeb = require('./web.js');
 const queryServer = require('./server.js');
 const queryPtero = require('./pterodactyl.js');
 
-const bottleneckSettings = { maxConcurrent: 1, highWater: 1, reservoir: 1, reservoirRefreshAmount: 1 }
-
-const webLimiters = new Bottleneck.Group({
-  ...bottleneckSettings,
-  reservoirRefreshInterval: humanInterval(process.env.WEB_QUERY_INTERVAL || '30 seconds')
-});
-
-const serverLimiters = new Bottleneck.Group({
-  ...bottleneckSettings,
-  reservoirRefreshInterval: humanInterval(process.env.SERVER_QUERY_INTERVAL || '1 minute')
-});
-
-const pteroLimiters = new Bottleneck.Group({
-  ...bottleneckSettings,
-  reservoirRefreshInterval: humanInterval(process.env.PTERODACTYL_QUERY_INTERVAL || '15 seconds')
-});
-
-const limiterGroups = [
-  { name: 'Web API', type: webLimiters },
-  { name: 'Server', type: serverLimiters },
-  { name: 'Pterodactyl', type: pteroLimiters }
-];
-
 module.exports = async function query(client_id, server) {
   let cache = jf.readFileSync(`./cache/${server.abbr}.json`, { throws: false })
-  if (cache) {
-    cache = { state: cache.current_state, connect: cache.connect, players: cache.players, maxPlayers: cache.max_players, map: cache.map };
-  }
-  webLimiters.on('created', (limiter, key) => {
-    limiter.on('error', (err) => {
-      console.log('[ERROR]', err);
-    });
-    limiter.on('failed', (err, job) => {
-      console.warn('[ERROR]', `Web query failed. (${server.name})\n${err}`);
-      if (job.retryCount !== 0) return;
-      console.log('[WARN]', `Retrying web query in one second. (${server.name})`);
-      return humanInterval('1 sec');
-    });
-    limiter.on('retry', (err, job) => console.log('[INFO]', `Retrying web query. (${server.name})`));
-  });
-  let response = cache || {
+
+  let response = (cache) ? {
+    state: cache.current_state,
+    connect: cache.connect,
+    players: cache.players,
+    maxPlayers: cache.max_players,
+    map: cache.map,
+    lastQueryTimes: cache.last_query_times
+  } : {
     state: 'off',
     connect: ((server.port) ? `${server.ip}:${server.port}`: server.ip),
     players: '0',
     maxPlayers: 'N/A',
     map: 'N/A'
   };
-  if (server.api && server.api.enabled) {
-    if (!server.api.url) {
-      console.log('[ERROR]', `URL is required for Web API! (${server.name})`);
-      process.exit();
-    } else {
-      try {
-        response = await webLimiters.key(`${server.abbr}-web-query`).schedule(
-          () => queryWeb(server.ip, server.port, server.api)
-        );
-        console.log('[EVENT]', `Web API queried. (${server.name})`);
-      } catch(err) {}
-    }
-  } else {
-    try {
-      response = await serverLimiters.key(`${server.abbr}-server-query`).schedule(
-        () => queryServer(server.ip, server.port, server.game)
-      );
-      console.log('[EVENT]', `Server queried. (${server.name})`);
-    } catch(err) {}
-  }
 
-  console.log(response);
+  const intervals = {
+    web: (!process.env.WEB_QUERY_INTERVAL) ? '30 seconds' : process.env.WEB_QUERY_INTERVAL,
+    server: (!process.env.SERVER_QUERY_INTERVAL) ? '1 minute' : process.env.SERVER_QUERY_INTERVAL,
+    ptero: (!process.env.PTERODACTYL_QUERY_INTERVAL) ? '15 seconds' : process.env.PTERODACTYL_QUERY_INTERVAL,
+  };
+
+  let lqt = response.lastQueryTimes;
+  let webQueryTime = (lqt && lqt.web !== false) ? new Date(lqt.web) : false;
+  let serverQueryTime = (lqt && lqt.server !== false) ? new Date(lqt.server) : false;
+
   let state = response.state;
-  if (server.pterodactyl && server.pterodactyl.enabled) {
-    try {
-      const pteroState = await pteroLimiters.key(`${server.abbr}-ptero-query`).schedule(
-        () => queryPtero(server.pterodactyl)
-      );
-      console.log('[EVENT]', `Pterodactyl queried. (${server.name})`);
-      console.log(pteroState);
-      state = ((state !== pteroState) ? pteroState : state);
-    } catch(err) {}
-  }
+  let pteroQueryTime = (lqt && lqt.ptero !== false) ? new Date(lqt.ptero) : false;
+
+  try {
+    switch(true) {
+      case (server.api && server.api.enabled): // Queries Web API
+        if (!server.api.url) {
+          console.log('[ERROR]', `URL is required for Web API! (${server.name})`);
+          process.exit();
+        } else if (!webQueryTime || webQueryTime < new Date((new Date) - humanInterval(intervals.web))) {
+          response = await queryWeb(server.ip, server.port, server.api);
+          webQueryTime = new Date;
+          console.log('[EVENT]', `(${server.name}) Web API queried.`);
+        }
+      break;
+      default: // Queries Game Server
+        if (!serverQueryTime || serverQueryTime < new Date((new Date) - humanInterval(intervals.server))) {
+          response = await queryServer(server.ip, server.port, server.game);
+          serverQueryTime = new Date;
+          console.log('[EVENT]', `(${server.name}) Server queried.`);
+        }
+    }
+    state = response.state;
+    // Queries Pterodactyl
+    if (server.pterodactyl && server.pterodactyl.enabled) {
+      if (!pteroQueryTime || pteroQueryTime < new Date((new Date) - humanInterval(intervals.ptero))) {
+        const pteroState = await queryPtero(server.pterodactyl);
+        pteroQueryTime = new Date;
+        state = ((state !== pteroState) ? pteroState : state);
+        console.log('[EVENT]', `(${server.name}) Pterodactyl queried.`);
+      }
+    }
+  } catch (err) {};
 
   const data = {
     on: {
@@ -147,15 +127,34 @@ module.exports = async function query(client_id, server) {
     connect: response.connect || ((server.port) ? `${server.ip}:${server.port}` : server.ip),
     players: response.players || 'N/A',
     max_players: response.maxPlayers || 'N/A',
-    map: response.map || 'N/A'
+    map: response.map || 'N/A',
+    last_query_times: {
+      web: webQueryTime,
+      server: serverQueryTime,
+      ptero: pteroQueryTime
+    }
   }
-
+  //console.log(json);
   return new Promise((resolve, reject) => {
     jf.readFile(`./cache/${server.abbr}.json`, function(err, obj) {
-      if (obj && obj.players === json.players) return;
+      if (obj && obj.last_query_times) {
+        switch(true) {
+          case (server.pterodactyl && server.pterodactyl.enabled):
+            if (obj.last_query_times.ptero === json.last_query_times.ptero.toISOString()) return;
+          break;
+          default:
+            switch(true) {
+              case (server.api && server.api.enabled):
+                if (obj.last_query_times.web === json.last_query_times.web.toISOString()) return;
+                break;
+              default:
+                if (obj.last_query_times.server === json.last_query_times.server.toISOString()) return;
+            }
+        }
+      }
       jf.writeFile(`./cache/${server.abbr}.json`, json, function(err) {
         if (err) return console.log(err);
-        console.log('[EVENT]', `Cache updated. (${server.name})`);
+        console.log('[EVENT]', `(${server.name}) Cache updated.`);
       })
     })
     resolve({ activity: activity, status: results.status });

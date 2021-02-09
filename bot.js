@@ -12,9 +12,9 @@ let servers = [];
 files.map(file => {
   const contents = fs.readFileSync(`./config/${file.name}`, 'utf-8');
   const config = TOML.parse(contents, 1.0, '\n');
-  if (!config.server[0].enabled) return;
+  if (!config.server.enabled) return;
 
-  const server = config.server[0];
+  const server = config.server;
   const bot = server.bot;
 
   if (!server.name || !server.ip || !bot.token) {
@@ -26,41 +26,44 @@ files.map(file => {
 
   server.abbr = path.parse(file.name).name;
 
+  let optionalSettings;
   if (server.optional) {
     optionalSettings = {
       connectURL: (server.optional.connect_url) ? server.optional.connect_url : false,
-      rules: (server.optional.rules_url) ? server.optional.rules : false,
-      content: (server.optional.content_url) ? server.content : false,
-      discords: (server.optional.discord_ids) ? server.discords : false
+      rules: (server.optional.rules_url) ? server.optional.rules_url : false,
+      content: (server.optional.content_url) ? server.optional.content_url : false,
+      discords: (server.optional.discords) ? server.optional.discords : false
     }
   }
 
   servers.push({
     name: server.name || 'Game Server',
     abbr: server.abbr,
-    color: (server.bot.color) ? server.bot.color : '#00ADFF',
-    ...optionalSettings
+    color: server.bot.color || '#00ADFF',
+    ...(optionalSettings && optionalSettings)
   })
 
   const client = new Client();
 
   client.on('ready', () => {
-    query(client.user.id, server).then(res => {
-      client.user.setPresence({
-        activity: { name: res.activity, type: server.bot.status.type },
-        status: res.status
-      });
-    });
-    setInterval(() => {
-      console.log('Interval ran');
+    let loop = () => {
       query(client.user.id, server).then(res => {
         client.user.setPresence({
           activity: { name: res.activity, type: server.bot.status.type },
           status: res.status
         });
       });
-    }, 5000);
-    if (client.user.username !== server.name) client.user.setUsername(server.name);
+      setTimeout(loop, 5000);
+    };
+    loop();
+    if (client.user.username !== server.name) {
+      console.log('[EVENT]', `Setting username/nicknames of ${client.user.username} to: ${server.name}`);
+      client.user.setUsername(server.name).then(client.guilds.cache.map(guild => {
+        guild.member(client.user).setNickname(server.name, 'Updated server username.');
+      })).catch(error => {
+        console.log('[ERROR]', `${error}\n(You can only set your bot's username four times an hour!)`)
+      });
+    }
     console.log('[EVENT]', `${client.user.username} is ready!`);
     console.log('[INFO]', `Bot Invite URL: https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=0&scope=bot`)
   });
@@ -74,6 +77,11 @@ if (process.env.COMMAND_BOT_TOKEN && servers.length !== 0) {
   const client = new Client();
   const slash = new Slash.Client(client, { commands: { directory: 'commands' }});
   client.on('ready', () => {
+    if (process.env.COMMAND_GUILD_IDS) {
+      slash.deleteCommands(false, true);
+    } else {
+      slash.deleteCommands(client.guilds.cache.map(guild => guild.id));
+    }
     slash.postCommands();
     console.log('[EVENT]', `${client.user.username} is ready!`);
     console.log('[INFO]', `Bot Invite URL: https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=280576&scope=applications.commands%20bot`)

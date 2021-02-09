@@ -1,15 +1,14 @@
 # Gameserver Settings
 # Clone this .toml file, renaming it with your server's abbreviation
-[[server]]
+[server]
   enabled = false
-  name = "Game Server" # Discord bot will set this as their name
+  name = "Game Server" # Discord bot will set this as their username, and nickname whenever the username has changed
+    # (Discord limits username changes to four an hour)
   game = 'garrysmod' # Defaults to garrysmod
     # see the full list at: https://github.com/gamedig/node-gamedig#games-list
   ip = '00.00.000.000'
   port = 27015 # Set to false or remove if not needed
-  rules = 'https://example.com/rules'
-  content = 'https://example.com/content'
-  discords = ['000000000000000000']
+
   # Discord Bot Settings
   [server.bot]
     token = '' # Discord bot token for this game server
@@ -43,4 +42,7 @@
     connect_url = '' # Must be HTTP or HTTPS! steam:// unsupported by Discord
     rules_url = '' # Link to your server's rules, set to false if not needed
     content_url = '' # Link to a download of your server's content, set to false if not needed
-    discord_ids = ['',''] # If the game server has seperate Discords, put the IDs here
+    discords = [ # If the game server has seperate Discords, put them here
+      { name = '', invite_code = '' },
+      { name = '', invite_code = '' }
+    ]

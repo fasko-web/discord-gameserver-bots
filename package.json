@@ -8,7 +8,8 @@
   "main": "./bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./bot.js"
+    "start": "node ./bot.js",
+    "delete": "node ./utils/delete.js"
   },
   "repository": {
     "type": "git",
@@ -21,15 +22,14 @@
   },
   "homepage": "https://github.com/fasko-web/discord-gameserver-bots#readme",
   "dependencies": {
+    "@ltd/j-toml": "^1.5.1",
     "bent": "^7.3.12",
-    "bottleneck": "^2.19.5",
     "da-slash": "https://github.com/fasko-web/da-slash",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "gamedig": "^2.0.24",
+    "gamedig": "^2.0.25",
     "human-interval": "^2.0.1",
     "jsonfile": "^6.1.0",
-    "p-ratelimit": "^1.0.1",
-    "@ltd/j-toml": "^1.2.0"
+    "p-ratelimit": "^1.0.1"
   }
 }

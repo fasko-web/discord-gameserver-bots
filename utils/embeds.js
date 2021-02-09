@@ -31,8 +31,7 @@ module.exports = (command, embed, d) => {
           { name: 'Players', value: data.players[d.cache.current_state], inline: true },
           { name: '\u200B',  value: '\u200B',                            inline: true },
           { name: 'Map',     value: data.map[d.cache.current_state],     inline: true }
-        ])
-        .setFooter(`Requested by ${d.author}`, d.guild.iconURL(16));
+        ]);
       if (d.server.rules || d.server.content) {
         if (d.server.rules && d.server.content) {
           embed.addFields([
@@ -56,9 +55,6 @@ module.exports = (command, embed, d) => {
         case (d.cache.current_state === 'off' || d.cache.current_state === 'stopping'):
           embed.setAuthor(`Can't connect to ${d.serverBot.username} while it's offline.`, d.serverBot.displayAvatarURL(16))
       }
-      break;
-    case 'discords':
-      embed.setAuthor(`${d.serverBot.username} - Discord Servers`, d.serverBot.displayAvatarURL(16))
       break;
     default:
       embed.setAuthor("ERROR - This command doesn't exist yet!")
