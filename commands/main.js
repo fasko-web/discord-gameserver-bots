@@ -6,7 +6,7 @@ const { servers } = require('../bot.js');
 const commandEmbed = require('../utils/embeds.js');
 
 const serversConnect = servers.filter(server => server.connectURL);
-const serversDiscord = servers.filter(server => server.discords);
+const serversDiscord = servers.filter(server => server.discords.filter(discord => discord.invite_code));
 const infoCommand = {
   name: 'info',
   description: `Displays information about one of ${process.env.COMMUNITY_NAME || 'our'} game servers.`,
@@ -91,7 +91,7 @@ const options = {
     const subCommand = request.data.options[0];
     const arguments = subCommand.options.map(arg => { return { name: arg.name, value: arg.value }});
     if (arguments.find(arg => arg.name === 'server') && !arguments.find(arg => arg.name === 'server').value) return;
-    console.log(subCommand.name, request.data);
+
     const serverAbbr = arguments.find(arg => arg.name === 'server').value;
     const client = interaction.client;
     const guild = await interaction.guild();
@@ -110,18 +110,20 @@ const options = {
     };
 
     if (subCommand.name === 'discords') {
-      let discords = server.discords.filter(discord => discord.invite_code).map(discord => {
-        return `\n**${discord.name}**\nhttps://discord.gg/${discord.invite_code}\n`
-      }).join('');
-      let mention = (process.env.SHOW_USER_INPUT === 'false') ? `<@${request.member.user.id}>\n` : '';
-      interaction.sendMessage(`${mention}${server.name} related Discords can be found below:\n${discords}`);
+      if (server.discords.filter(discord => discord.invite_code).length > 0) {
+        let discords = server.discords.filter(discord => discord.invite_code).map(discord => {
+          return `\n**${discord.name || server.name + ' Discord'}**\nhttps://discord.gg/${discord.invite_code}\n`
+        }).join('');
+        let mention = (process.env.SHOW_USER_INPUT === 'false') ? `<@${request.member.user.id}>\n` : '';
+        interaction.sendMessage(`${mention}${server.name} related Discords can be found below:\n${discords}`);
+      }
     } else {
       let embed = new MessageEmbed().setColor(server.color);
       embed = commandEmbed(subCommand.name, embed, data);
       interaction.sendEmbed({
         ...(process.env.SHOW_USER_INPUT === 'false' && { content: `<@${request.member.user.id}>` }),
         embed
-       }).then(console.log).catch(console.error);
+       }).catch(console.error);
     }
   }
 }
