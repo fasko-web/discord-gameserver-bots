@@ -65,7 +65,7 @@ module.exports = async function query(client_id, server) {
       }
     }
   } catch (err) {};
-
+  console.log(state, response);
   const data = {
     on: {
       current_state: {
@@ -102,6 +102,14 @@ module.exports = async function query(client_id, server) {
         off: {
           status: 'idle',
           activity: 'Server Starting..'
+        },
+        starting: {
+          status: 'idle',
+          activity: 'Server Starting..'
+        },
+        stopping: {
+          status: 'idle',
+          activity: 'Server Stopping..'
         }
       }
     },
@@ -118,7 +126,7 @@ module.exports = async function query(client_id, server) {
     options = 'map';
   }
 
-  const results = ((state !== 'off' || state !== 'stopping') ? data[state].current_state[response.state] : data[state]);
+  const results = (state !== 'off' || state !== 'stopping') ? data[state].current_state[response.state] : data[state];
   const activity = ((results.activity[options]) ? results.activity[options] : results.activity);
 
   const json = {
