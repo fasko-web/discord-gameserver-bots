@@ -6,10 +6,10 @@ const { Client } = require('discord.js');
 const query = require('./jobs');
 
 const files = fs.readdirSync('./config', { withFileTypes: true })
-  .filter(file => !file.isDirectory() || !file.name.includes('default'));
+  .filter(file => file.name.endsWith('.toml'));
 
 let servers = [];
-files.map(file => {
+files.filter(file => !file.name.includes('default')).map(file => {
   const contents = fs.readFileSync(`./config/${file.name}`, 'utf-8');
   const config = TOML.parse(contents, 1.0, '\n');
   if (!config.server.enabled) return;
@@ -60,11 +60,15 @@ files.map(file => {
       console.log('[EVENT]', `Setting username/nicknames of ${client.user.username} to: ${server.name}`);
       client.user.setUsername(server.name).then(() => {
         console.log('[EVENT]', `${client.user.username} is ready!`);
-        client.guilds.cache.map(guild => { guild.member(client.user).setNickname(server.name, 'Updated server username.') });
+        client.guilds.cache.map(guild => {
+          guild.member(client.user).setNickname(server.name, 'Updated server username.')
+        });
       }).catch(error => {
         console.log('[ERROR]', `(${client.user.username}) ${error}`);
         console.log('[EVENT]', `${client.user.username} is ready!`);
       });
+    } else {
+      console.log('[EVENT]', `${client.user.username} is ready!`);
     }
     console.log('[INFO]', `Bot Invite URL: https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=0&scope=bot`)
   });
@@ -93,5 +97,5 @@ if (process.env.COMMAND_BOT_TOKEN && servers.length !== 0) {
   });
   client.login(process.env.COMMAND_BOT_TOKEN);
 } else {
-  console.log('[WARN]', 'No bot token provided in the .env, commands disabled! (COMMAND_BOT_TOKEN)')
+  if (!process.env.COMMAND_BOT_TOKEN) console.log('[WARN]', 'No bot token provided in the .env, commands disabled! (COMMAND_BOT_TOKEN)');
 }
