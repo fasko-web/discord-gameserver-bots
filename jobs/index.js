@@ -33,6 +33,7 @@ module.exports = async function query(client_id, server) {
   let serverQueryTime = (lqt && lqt.server !== false) ? new Date(lqt.server) : false;
 
   let state = response.state;
+  let currentState = response.state;
   let pteroQueryTime = (lqt && lqt.ptero !== false) ? new Date(lqt.ptero) : false;
 
   try {
@@ -55,83 +56,57 @@ module.exports = async function query(client_id, server) {
         }
     }
     state = response.state;
+
     // Queries Pterodactyl
     if (server.pterodactyl && server.pterodactyl.enabled) {
       if (!pteroQueryTime || pteroQueryTime < new Date((new Date) - humanInterval(intervals.ptero))) {
-        const pteroState = await queryPtero(server.pterodactyl);
+        currentState = await queryPtero(server.pterodactyl);
         pteroQueryTime = new Date;
-        state = ((state !== pteroState) ? pteroState : state);
+        // state = ((state !== pteroState) ? pteroState : state);
         console.log('[EVENT]', `(${server.name}) Pterodactyl queried.`);
       }
+    } else {
+      currentState = response.state;
     }
-  } catch (err) {};
-  console.log(state, response);
+  } catch (err) { console.log(err) };
+
+  //console.log(state, response);
+
+  let onlineActivity = 'Server Online';
+  if (server.bot.status.players) {
+    if (server.bot.status.map) {
+      onlineActivity = `${response.players}/${response.maxPlayers} on ${response.map}`
+    } else {
+      onlineActivity = `${response.players}/${response.maxPlayers}`
+    }
+  } else if (server.bot.status.map) {
+    onlineActivity = response.map
+  }
+
   const data = {
     on: {
-      current_state: {
-        on: {
-          status: 'online',
-          activity: {
-            players: `${response.players}/${response.maxPlayers}`,
-            map: response.map,
-            both: `${response.players}/${response.maxPlayers} on ${response.map}`,
-            default: 'Server Online'
-          }
-        },
-        off: {
-          status: 'idle',
-          activity: 'Fetching Info..'
-        }
-      }
+      status: (state !== 'on' || response.maxPlayers === 'N/A') ? 'idle' : 'online',
+      activity: (state !== 'on' || response.maxPlayers === 'N/A') ? 'Fetching Info..' : onlineActivity
     },
     off: {
-      status: 'dnd',
-      activity: 'Server Offline'
+      status: (state !== 'on') ? 'dnd' : 'online',
+      activity: (state !== 'on') ? 'Server Offline' : onlineActivity // 'Panel Error'
     },
     starting: {
-      current_state: {
-        on: {
-          status: 'online',
-          activity: {
-            players: `${response.players}/${response.maxPlayers}`,
-            map: response.map,
-            both: `${response.players}/${response.maxPlayers} on ${response.map}`,
-            default: 'Server Online'
-          }
-        },
-        off: {
-          status: 'idle',
-          activity: 'Server Starting..'
-        },
-        starting: {
-          status: 'idle',
-          activity: 'Server Starting..'
-        },
-        stopping: {
-          status: 'idle',
-          activity: 'Server Stopping..'
-        }
-      }
+      status: (state !== 'on') ? 'idle' : 'online',
+      activity: (state !== 'on') ? 'Server Starting..' : onlineActivity
     },
     stopping: {
-      status: 'idle',
-      activity: 'Server Stopping..'
+      status: (state !== 'on') ? 'idle' : 'online',
+      activity: (state !== 'on') ? 'Server Stopping..' : onlineActivity
     }
   }
-
-  let options = 'default';
-  if (server.bot.status.players) {
-    options = ((server.bot.status.map) ? 'both' : 'players');
-  } else if (server.bot.status.map) {
-    options = 'map';
-  }
-
-  const results = (state !== 'off' || state !== 'stopping') ? data[state].current_state[response.state] : data[state];
-  const activity = ((results.activity[options]) ? results.activity[options] : results.activity);
+  const status = data[currentState].status;
+  const activity = data[currentState].activity;
 
   const json = {
     bot_id: client_id,
-    current_state: state || 'off',
+    current_state: currentState || 'off',
     connect: response.connect || ((server.port) ? `${server.ip}:${server.port}` : server.ip),
     players: response.players || 'N/A',
     max_players: response.maxPlayers || 'N/A',
@@ -148,8 +123,32 @@ module.exports = async function query(client_id, server) {
       if (obj && obj.last_query_times) {
         switch(true) {
           case (server.pterodactyl && server.pterodactyl.enabled):
-            if (obj.last_query_times.ptero === json.last_query_times.ptero.toISOString()) return;
-          break;
+            if (obj.last_query_times.ptero === json.last_query_times.ptero.toISOString()) {
+              switch(true) {
+                case (server.api && server.api.enabled):
+                  if (obj.last_query_times.web !== json.last_query_times.web.toISOString()) {
+                    jf.writeFile(`./cache/${server.abbr}.json`, json, function(err) {
+                      if (err) return console.log(err);
+                      console.log('[EVENT]', `(${server.name}) Cache updated.`);
+                    });
+                  };
+                  break;
+                default:
+                  if (obj.last_query_times.server !== json.last_query_times.server.toISOString()) {
+                    jf.writeFile(`./cache/${server.abbr}.json`, json, function(err) {
+                      if (err) return console.log(err);
+                      console.log('[EVENT]', `(${server.name}) Cache updated.`);
+                    });
+                  };
+              }
+              return;
+            } else {
+              jf.writeFile(`./cache/${server.abbr}.json`, json, function(err) {
+                if (err) return console.log(err);
+                console.log('[EVENT]', `(${server.name}) Cache updated.`);
+              });
+            }
+            break;
           default:
             switch(true) {
               case (server.api && server.api.enabled):
@@ -158,13 +157,18 @@ module.exports = async function query(client_id, server) {
               default:
                 if (obj.last_query_times.server === json.last_query_times.server.toISOString()) return;
             }
+            jf.writeFile(`./cache/${server.abbr}.json`, json, function(err) {
+              if (err) return console.log(err);
+              console.log('[EVENT]', `(${server.name}) Cache updated.`);
+            });
         }
+      } else {
+        jf.writeFile(`./cache/${server.abbr}.json`, json, function(err) {
+          if (err) return console.log(err);
+          console.log('[EVENT]', `(${server.name}) Cache updated.`);
+        });
       }
-      jf.writeFile(`./cache/${server.abbr}.json`, json, function(err) {
-        if (err) return console.log(err);
-        console.log('[EVENT]', `(${server.name}) Cache updated.`);
-      })
     })
-    resolve({ activity: activity, status: results.status });
+    resolve({ activity: activity, status: status });
   });
 };

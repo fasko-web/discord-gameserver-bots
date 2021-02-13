@@ -9,34 +9,31 @@ module.exports = (command, embed, d) => {
       stopping: '<:idle:765156832015941662> Stopping'
     },
     players: {
-      on: `${d.cache.players}/${d.cache.max_players}`,
-      off: d.cache.max_players,
-      starting: 'Fetching Info..',
-      stopping: d.cache.max_players
+      on: (d.cache.max_players !== 'N/A') ? `${d.cache.players}/${d.cache.max_players}` : 'Fetching Info..',
+      off: 'N/A',
+      starting: 'Awaiting Info..',
+      stopping: 'N/A'
     },
     map: {
-      on: d.cache.map,
-      off: d.cache.map,
-      starting: 'Fetching Info..',
-      stopping: d.cache.map
+      on: (d.cache.map !== 'N/A') ? d.cache.map : 'Fetching Info..',
+      off: 'N/A',
+      starting: 'Awaiting Info..',
+      stopping: 'N/A'
     }
   }
   switch(command) {
     case 'info':
       embed.setAuthor(`${d.serverBot.username} - Information`, d.serverBot.displayAvatarURL(16))
         .addFields([
-          { name: 'Status',  value: data.status[d.cache.current_state],  inline: true },
-          { name: '\u200B',  value: '\u200B',                            inline: true },
-          { name: 'Address', value: d.cache.connect,                     inline: true },
-          { name: 'Players', value: data.players[d.cache.current_state], inline: true },
-          { name: '\u200B',  value: '\u200B',                            inline: true },
-          { name: 'Map',     value: data.map[d.cache.current_state],     inline: true }
+          { name: 'Status',  value: data.status[d.cache.current_state] },
+          { name: 'Address', value: d.cache.connect },
+          { name: 'Players', value: data.players[d.cache.current_state] },
+          { name: 'Map',     value: data.map[d.cache.current_state] }
         ]);
       if (d.server.rules || d.server.content) {
         if (d.server.rules && d.server.content) {
           embed.addFields([
             { name: 'Rules',   value: `[Server Rules](${d.server.rules})`,     inline: true },
-            { name: '\u200B',  value: '\u200B',                                inline: true },
             { name: 'Content', value: `[Server Content](${d.server.content})`, inline: true }
           ]);
         } else if (d.server.rules) {

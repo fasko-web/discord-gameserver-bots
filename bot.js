@@ -5,8 +5,7 @@ const TOML = require('@ltd/j-toml');
 const { Client } = require('discord.js');
 const query = require('./jobs');
 
-const files = fs.readdirSync('./config', { withFileTypes: true })
-  .filter(file => file.name.endsWith('.toml'));
+const files = fs.readdirSync('./config', { withFileTypes: true }).filter(file => file.name.endsWith('.toml'));
 
 let servers = [];
 files.filter(file => !file.name.includes('default')).map(file => {
@@ -46,12 +45,16 @@ files.filter(file => !file.name.includes('default')).map(file => {
   const client = new Client();
 
   client.on('ready', () => {
+    client.user.setPresence({
+      activity: { name: 'Fetching Info..', type: server.bot.status.type },
+      status: 'idle'
+    });
     let loop = () => {
       query(client.user.id, server).then(res => {
         client.user.setPresence({
           activity: { name: res.activity, type: server.bot.status.type },
           status: res.status
-        });
+        }).catch((err) => console.log(err));
       });
       setTimeout(loop, 5000);
     };

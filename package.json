@@ -9,7 +9,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./bot.js",
-    "delete": "node ./utils/delete.js"
+    "delete": "node ./utils/delete.js",
+    "delete:cache": "npm run delete -- cache",
+    "delete:commands": "npm run delete -- commands"
   },
   "repository": {
     "type": "git",
