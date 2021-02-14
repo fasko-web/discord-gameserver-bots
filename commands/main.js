@@ -5,8 +5,15 @@ const { MessageEmbed } = require('discord.js');
 const { servers } = require('../bot.js');
 const commandEmbed = require('../utils/embeds.js');
 
+const serverDiscords = servers.map(server => {
+  if (!server.discords) return;
+  let discords = server.discords.map(discord => (discord.invite_code !== '') && discord.invite_code);
+  if (!discords.every(discord => discord === false)) return server;
+})
+
 const serversConnect = servers.filter(server => server.connectURL);
-const serversDiscord = servers.filter(server => server.discords.filter(discord => discord.invite_code));
+const serversDiscord = serverDiscords.filter(server => server !== undefined);
+
 const infoCommand = {
   name: 'info',
   description: `Displays information about one of ${process.env.COMMUNITY_NAME || 'our'} game servers.`,
