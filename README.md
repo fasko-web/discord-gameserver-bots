@@ -85,7 +85,7 @@ COMMAND_GUILD_IDS =
 SHOW_USER_INPUT = false
 
 SERVER_QUERY_INTERVAL = 1 minute
-API_QUERY_INTERVAL = 30 seconds
+WEB_QUERY_INTERVAL = 30 seconds
 PTERODACTYL_QUERY_INTERVAL = 15 seconds
 ```
 
@@ -103,7 +103,7 @@ Config Name | Information
 `COMMAND_GUILD_IDS` | The Discord guild IDs separated by commas (no spaces!) that your commands bot will be in. Only required if you want to post slash commands to your guilds instead of globally, since global slash commands can take awhile to update. Default: `global`
 `SHOW_USER_INPUT` | Toggles whether Discord will reply back with the command used, alongside the bot's response. Default: `false`
 `SERVER_QUERY_INTERVAL` | The interval your game server will be queried. Only required if you're not using a web API. Default: `1 minute`
-`API_QUERY_INTERVAL` | The interval your web API will be queried. Only required if you're not using the server query. Default: `30 seconds`
+`WEB_QUERY_INTERVAL` | The interval your web API will be queried. Only required if you're not using the server query. Default: `30 seconds`
 `PTERODACTYL_QUERY_INTERVAL` | The interval your Pterodactyl Panel's API will be queried. Only required if you plan on using it. This should always be set lower than your server or API query interval. Default: `15 seconds`
 
 </details>
