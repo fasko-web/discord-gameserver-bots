@@ -1,7 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const TOML = require('@ltd/j-toml');
+const TOML = require('@iarna/toml');
 const { Client } = require('discord.js');
 const query = require('./jobs');
 
@@ -10,7 +10,7 @@ const files = fs.readdirSync('./config', { withFileTypes: true }).filter(file =>
 let servers = [];
 files.filter(file => !file.name.includes('default')).map(file => {
   const contents = fs.readFileSync(`./config/${file.name}`, 'utf-8');
-  const config = TOML.parse(contents, 1.0, '\n');
+  const config = TOML.parse(contents);
   if (!config.server.enabled) return;
 
   const server = config.server;
