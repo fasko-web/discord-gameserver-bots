@@ -1,7 +1,7 @@
 {
   "name": "discord-gameserver-bots",
   "version": "2.0.0",
-  "description": "A Discord bot instance for each gameserver. Queries from SourceQuery or REST API, w/ Pterodactyl integration.",
+  "description": "An application for creating and managing Discord bots that display information related to your game servers.",
   "engines": {
     "node": ">=12.0"
   },
