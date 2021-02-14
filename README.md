@@ -204,10 +204,19 @@ If you plan on having a single server with multiple applications, or already do,
 
 ---
 
-#### 🗑️ Removing commands
+#### 🗑️ Removing commands & clearing the cache
 If you're removing the bot from your server, then you'll probably want to delete the commands left behind as well.
 ```bash
-npm run delete
+npm run delete -- commands
+# or
+npm run delete:commands
+```
+
+If you've changed your intervals within the `.env`, it could be a good idea to clear the cache before restarting.
+```bash
+npm run delete -- cache
+# or
+npm run delete:cache
 ```
 
 ---
