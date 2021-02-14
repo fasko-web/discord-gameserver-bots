@@ -12,7 +12,7 @@
   # Discord Bot Settings
   [server.bot]
     token = '' # Discord bot token for this game server
-    color = '#00ADFF' # Used for embed and role colors
+    color = '#00ADFF' # Used for embed colors
 
     [server.bot.status]
       type = 'PLAYING' # 'PLAYING' || 'WATCHING' || 'LISTENING' || 'STREAMING' || 'COMPETING'
