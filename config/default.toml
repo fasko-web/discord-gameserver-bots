@@ -1,0 +1,48 @@
+# Gameserver Settings
+# Clone this .toml file, renaming it with your server's abbreviation
+[server]
+  enabled = false
+  name = "Game Server" # Discord bot will set this as their username, and nickname whenever the username has changed
+    # (Discord limits username changes to four an hour)
+  game = 'garrysmod' # Defaults to garrysmod
+    # see the full list at: https://github.com/gamedig/node-gamedig#games-list
+  ip = '00.00.000.000'
+  port = 27015 # Set to false or remove if not needed
+
+  # Discord Bot Settings
+  [server.bot]
+    token = '' # Discord bot token for this game server
+    color = '#00ADFF' # Used for embed colors
+
+    [server.bot.status]
+      type = 'PLAYING' # 'PLAYING' || 'WATCHING' || 'LISTENING' || 'STREAMING' || 'COMPETING'
+      players = true # If true, shows current & max players in bot status
+      map = true # If true, shows map in bot status
+
+  # Web API Settings
+  #   If you have your server data already being cached somewhere, use this to prevent unneccessary queries to your game server
+  #   Otherwise you can remove entirely
+  [server.api]
+    enabled = false
+    url = 'https://example.com/api/server' # Location of JSON
+    server_id = 0 # If your web API contains multiple servers, this is your server's index or key (for key, use double quotes)
+
+  # Pterodactyl Settings
+  #   Provides a more accurate status, only use if your gameserver is hosted on a Pterodactyl panel
+  #   Otherwise you can remove entirely
+  [server.pterodactyl]
+    enabled = false
+    version = 'old' # If running Pterodactyl panel v1.0+ set to 'new', otherwise leave as 'old'
+    url = 'https://example.com' # Root location of your Pterodactyl panel, no trailing slash
+    server_id = '' # ID of your server within the Pterodactyl panel
+    api_key = ''
+
+  # Optional Settings
+  [server.optional]
+    connect_url = '' # Must be HTTP or HTTPS! steam:// unsupported by Discord
+    rules_url = '' # Link to your server's rules, set to false if not needed
+    content_url = '' # Link to a download of your server's content, set to false if not needed
+    discords = [ # If the game server has seperate Discords, put them here
+      { name = '', invite_code = '' },
+      { name = '', invite_code = '' }
+    ]
