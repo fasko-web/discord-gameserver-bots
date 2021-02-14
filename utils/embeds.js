@@ -6,19 +6,22 @@ module.exports = (command, embed, d) => {
       on: '<:online:765156793986580480> Online',
       off: '<:dnd:765156807231930369> Offline',
       starting: '<:idle:765156832015941662> Starting',
-      stopping: '<:idle:765156832015941662> Stopping'
+      stopping: '<:idle:765156832015941662> Stopping',
+      unknown: '<:dnd:765156807231930369> Panel Error'
     },
     players: {
       on: (d.cache.max_players !== 'N/A') ? `${d.cache.players}/${d.cache.max_players}` : 'Fetching Info..',
       off: 'N/A',
       starting: 'Awaiting Info..',
-      stopping: 'N/A'
+      stopping: 'N/A',
+      unknown: 'N/A'
     },
     map: {
       on: (d.cache.map !== 'N/A') ? d.cache.map : 'Fetching Info..',
       off: 'N/A',
       starting: 'Awaiting Info..',
-      stopping: 'N/A'
+      stopping: 'N/A',
+      unknown: 'N/A'
     }
   }
   switch(command) {

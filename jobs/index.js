@@ -85,12 +85,12 @@ module.exports = async function query(client_id, server) {
 
   const data = {
     on: {
-      status: (state !== 'on' || response.maxPlayers === 'N/A') ? 'idle' : 'online',
+      status: 'online',
       activity: (state !== 'on' || response.maxPlayers === 'N/A') ? 'Fetching Info..' : onlineActivity
     },
     off: {
       status: (state !== 'on') ? 'dnd' : 'online',
-      activity: (state !== 'on') ? 'Server Offline' : onlineActivity // 'Panel Error'
+      activity: (state !== 'on') ? 'Server Offline' : onlineActivity
     },
     starting: {
       status: (state !== 'on') ? 'idle' : 'online',
@@ -99,6 +99,10 @@ module.exports = async function query(client_id, server) {
     stopping: {
       status: (state !== 'on') ? 'idle' : 'online',
       activity: (state !== 'on') ? 'Server Stopping..' : onlineActivity
+    },
+    unknown: {
+      status: 'dnd',
+      activity: 'Panel Error'
     }
   }
   const status = data[currentState].status;
