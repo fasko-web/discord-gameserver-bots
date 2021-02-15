@@ -15,7 +15,7 @@
       map = true
 
   [server.api]
-    enabled = true
+    enabled = false
     url = 'https://definitivenetworksgmod.com/api/server/cache.json'
     server_id = "0"
 
