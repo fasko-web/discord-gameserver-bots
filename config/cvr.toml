@@ -1,0 +1,36 @@
+[server]
+  enabled = true
+  name = "Combine vs. Rebels"
+  game = 'garrysmod'
+  ip = '66.23.200.120'
+  port = 27015
+
+  [server.bot]
+    token = '${CVR_BOT_TOKEN}'
+    color = '#FB7E14'
+
+    [server.bot.status]
+      type = 'PLAYING'
+      players = true
+      map = true
+
+  [server.api]
+    enabled = true
+    url = 'https://definitivenetworksgmod.com/api/server/cache.json'
+    server_id = "0"
+
+  [server.pterodactyl]
+    enabled = true
+    version = 'old'
+    url = '${PTERO_PANEL}'
+    server_id = '${CVR_PTERO_ID}'
+    api_key = '${PTERO_KEY}'
+
+  [server.optional]
+    connect_url = 'https://definitivenetworksgmod.com/connect/steam/cvr'
+    rules_url = 'https://definitivenetworksgmod.com/rules#cvr'
+    content_url = 'https://steamcommunity.com/sharedfiles/filedetails/?id=1371896741'
+    discords = [
+      { name = 'Combine Discord', invite_code = 'dJxdmfg' },
+      { name = 'Resistance Discord', invite_code = 'GdPqTVb' }
+    ]
