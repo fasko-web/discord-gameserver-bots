@@ -11,7 +11,7 @@ module.exports = async (ip, port = false, api) => {
   let res = await rateLimit(() => stream(api.url));
   if (res.statusCode === 200) {
     const body = await res.json();
-    if (body[api.server_id] && body[api.server_id].players.toString()) {
+    if (body[api.server_id] && body[api.server_id].map.toString() !== 'N/A') {
       const server = body[api.server_id];
       return {
         state: 'on',
