@@ -44,12 +44,15 @@ module.exports = async function query(client_id, server) {
       break;
       default: // Queries Game Server
         if (!serverQueryTime || serverQueryTime < new Date((new Date) - humanInterval(intervals.server))) {
-          response = await queryServer(server.ip, server.port, server.game);
+          response = await queryServer(server.ip, server.port, server.game, server.query_port);
           serverQueryTime = new Date;
           console.log('[EVENT]', `(${server.name}) Server queried.`);
         }
     }
     state = response.state;
+    response.maxPlayers = (server.max_players > 0 && response.maxPlayers !== server.max_players)
+      ? server.max_players
+      : response.maxPlayers;
 
     // Queries Pterodactyl
     if (server.pterodactyl && server.pterodactyl.enabled) {

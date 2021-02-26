@@ -1,11 +1,12 @@
 const GameDig = require('gamedig');
 
-module.exports = (ip, port = false, game = 'garrysmod') => {
+module.exports = (ip, port = false, game = 'garrysmod', queryPort = false) => {
+  qp = queryPort || port;
   const response = GameDig.query({
     type: game,
     host: ip,
-    ...(port && { port : port.toString() }),
-    ...(port && { givenPortOnly: true })
+    ...(qp && { port : qp.toString() }),
+    ...(qp && { givenPortOnly: true })
   }).then((state) => {
     return {
       state: 'on',

@@ -9,6 +9,10 @@
   ip = '00.00.000.000'
   port = 27015 # Set to false or remove if not needed
 
+  # Extra optional settings for game servers with weird queries
+  query_port = false # Set if the game's server requires querying a specific port, expects an integer
+  max_players = false # Set if the game's server query has trouble detecting max players, expects an integer
+
   # Discord Bot Settings
   [server.bot]
     token = '' # Discord bot token for this game server
