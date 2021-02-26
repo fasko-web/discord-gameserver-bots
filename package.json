@@ -1,6 +1,6 @@
 {
   "name": "discord-gameserver-bots",
-  "version": "2.0.0",
+  "version": "2.0.5",
   "description": "An application for creating and managing Discord bots that display information related to your game servers.",
   "engines": {
     "node": ">=12.0"
@@ -26,6 +26,7 @@
   "dependencies": {
     "@iarna/toml": "^2.2.5",
     "bent": "^7.3.12",
+    "chalk": "^4.1.0",
     "da-slash": "git+https://github.com/fasko-web/da-slash.git",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
