@@ -12,13 +12,13 @@ module.exports = async (ip, port = false, api) => {
   if (res.statusCode === 200) {
     const body = await res.json();
     if (body[api.server_id] && body[api.server_id].map.toString() !== 'N/A') {
-      const server = body[api.server_id];
+      const state = body[api.server_id];
       return {
         state: 'on',
-        connect: server.connect || `${server.ip}:${server.port}`,
-        players: server.players.toString(),
-        maxPlayers: server.maxPlayers.toString() || server.max_players.toString(),
-        map: server.map
+        connect: state.connect || state.address || `${state.ip}:${state.port}`,
+        players: (state.players >= 0) ? state.players.toString() : state.players.length.toString(),
+        maxPlayers: state.maxPlayers.toString() || state.max_players.toString(),
+        map: state.map || false
       }
     } else {
       console.log('[ERROR]', body);
