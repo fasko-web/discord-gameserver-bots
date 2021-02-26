@@ -26,10 +26,10 @@
   "dependencies": {
     "@iarna/toml": "^2.2.5",
     "bent": "^7.3.12",
-    "da-slash": "https://github.com/fasko-web/da-slash",
+    "da-slash": "git+https://github.com/fasko-web/da-slash.git",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "gamedig": "^2.0.27",
+    "gamedig": "^3.0.0",
     "human-interval": "^2.0.1",
     "jsonfile": "^6.1.0",
     "p-ratelimit": "^1.0.1"

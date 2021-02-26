@@ -127,7 +127,8 @@ Config Name | Information
 `game` | The game your server is running on. Must be supported by [GameDig](https://github.com/gamedig/node-gamedig#games-list). Default: `'garrysmod'`
 `ip` | Your game server's IP address.
 `port` | Your game server's port. Set to false if unused. Default: `27015`
-
+`query_port` | Your game server's separate query port. Expects an integer if set. Default `false`
+`max_players` | Your game server's max players. Only necessary if the query is having trouble detecting accurate count. Default: `false`
 
 ##### Bot Settings - `server.bot`
 Config Name | Information
