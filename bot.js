@@ -39,7 +39,15 @@ files.filter(file => !file.name.includes('default')).map(file => {
     })
   })
 
-  const client = new Client();
+  const client = new Client({
+    presence: {
+      status: 'idle',
+      activity: {
+        name: 'Fetching Info..',
+        type: server.bot.status.type || 'PLAYING'
+      }
+    }
+  });
 
   client.on('ready', () => {
     client.user.setPresence({
