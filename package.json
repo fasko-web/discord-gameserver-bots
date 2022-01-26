@@ -28,7 +28,7 @@
     "bent": "^7.3.12",
     "da-slash": "git+https://github.com/fasko-web/da-slash.git",
     "discord.js": "^12.5.1",
-    "dotenv": "^8.2.0",
+    "dotenv": "^14.3.2",
     "gamedig": "^3.0.0",
     "env-subst": "^1.0.3",
     "human-interval": "^2.0.1",
